@@ -1,13 +1,21 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { signUp } from "@/lib/auth-client";
+import { signOut, signUp, useSession } from "@/lib/auth-client";
+import Link from "next/link";
 import React, { useState } from "react";
 
 const Home = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const {
+    data: session,
+    isPending, //loading state
+    error, //error object
+    refetch, //refetch the session
+  } = useSession();
+  console.log(session);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,27 +39,17 @@ const Home = () => {
     );
   };
 
-  return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-2 p-16">
-      <Input
-        placeholder="Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <Input
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <Input
-        placeholder="Password"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+  if (session?.user) {
+    return <Button onClick={() => signOut()}>Sign out</Button>;
+  }
 
-      <Button type="submit">Submit</Button>
-    </form>
+  return (
+    <div className="flex flex-col gap-6">
+      <h1 className="font-semibold text-2xl">You are not logged in</h1>
+      <Button asChild>
+        <Link href="/sign-in">Sign In</Link>
+      </Button>
+    </div>
   );
 };
 
