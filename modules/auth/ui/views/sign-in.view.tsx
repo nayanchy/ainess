@@ -43,6 +43,28 @@ const SignInView = () => {
     },
   });
 
+  const onSocial = (provider: "google" | "github") => {
+    setError(null);
+    setPending(true);
+
+    signIn.social(
+      {
+        provider,
+        callbackURL: "/",
+      },
+      {
+        onSuccess: () => {
+          setPending(false);
+        },
+        onError: ({ error }) => {
+          console.log("Error:", error);
+          setError(error.message);
+          setPending(false);
+        },
+      }
+    );
+  };
+
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     setError(null);
     setPending(true);
@@ -146,6 +168,7 @@ const SignInView = () => {
                     variant="outline"
                     type="button"
                     className="w-full cursor-pointer"
+                    onClick={() => onSocial("google")}
                   >
                     <FcGoogle />
                     Google
@@ -155,6 +178,7 @@ const SignInView = () => {
                     variant="outline"
                     type="button"
                     className="w-full cursor-pointer"
+                    onClick={() => onSocial("github")}
                   >
                     <FaGithub />
                     Github

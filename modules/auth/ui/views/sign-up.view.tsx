@@ -24,7 +24,7 @@ import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa6";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { signUp } from "@/lib/auth-client";
+import { signIn, signUp } from "@/lib/auth-client";
 
 const formSchema = z
   .object({
@@ -58,6 +58,28 @@ const SignUpView = () => {
       confirmPassword: "",
     },
   });
+
+  const onSocial = (provider: "google" | "github") => {
+    setError(null);
+    setPending(true);
+
+    signIn.social(
+      {
+        provider,
+        callbackURL: "/",
+      },
+      {
+        onSuccess: () => {
+          setPending(false);
+        },
+        onError: ({ error }) => {
+          console.log("Error:", error);
+          setError(error.message);
+          setPending(false);
+        },
+      }
+    );
+  };
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     setError(null);
@@ -205,6 +227,7 @@ const SignUpView = () => {
                     variant="outline"
                     type="button"
                     className="w-full cursor-pointer"
+                    onClick={() => onSocial("google")}
                   >
                     <FcGoogle />
                     Google
@@ -214,6 +237,7 @@ const SignUpView = () => {
                     variant="outline"
                     type="button"
                     className="w-full cursor-pointer"
+                    onClick={() => onSocial("github")}
                   >
                     <FaGithub />
                     Github
