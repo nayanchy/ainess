@@ -13,17 +13,21 @@ const HomeView = () => {
 
   if (session?.user) {
     return (
-      <Button
-        onClick={() =>
-          signOut({
-            fetchOptions: {
-              onSuccess: () => router.push("/sign-in"),
-            },
-          })
-        }
-      >
-        Sign out
-      </Button>
+      <div className="flex flex-col gap-6">
+        <p>You are logged in as {session.user.name}</p>
+        <p>Email: {session.user.email}</p>
+        <Button
+          onClick={() =>
+            signOut({
+              fetchOptions: {
+                onSuccess: () => router.push("/sign-in"),
+              },
+            })
+          }
+        >
+          Sign out
+        </Button>
+      </div>
     );
   }
 

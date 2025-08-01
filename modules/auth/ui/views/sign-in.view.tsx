@@ -201,10 +201,11 @@ const SignInView = () => {
             <Image
               src="/ainess.png"
               alt="Logo"
-              width={200}
-              height={200}
+              width={90}
+              height={90}
               className=""
             />
+            <p className="text-2xl font-bold text-white">AiNess</p>
           </div>
         </CardContent>
       </Card>
